@@ -4,7 +4,7 @@
 
 template<typename T>
 class MyArray {
-private:
+protected:
     T* data;
     int size;
     int capacity;
@@ -31,6 +31,9 @@ public:
     bool isFull();
     // 判断索引是否越界
     bool pIsOutOfRange(int p);
+
+	//修改数组容量为newCapacity，若newCapacity小于size，则size变为newCapacity
+    void resize(int newCapacity);
 
     /* 
     在指定位置插入元素
@@ -131,6 +134,25 @@ bool MyArray<T>::isFull() {
 template<typename T>
 bool MyArray<T>::pIsOutOfRange(int p) {
     return p < 0 || p >= capacity;
+}
+
+template<typename T>
+void MyArray<T>::resize(int newCapacity) {
+    if (newCapacity < 0) {
+        std::cout << "error happened in resize!\n";
+        std::cout << "capacity = " << getCapacity() << "\n";
+        std::cout << "the new capacity is negative!\n";
+        return;
+    }
+    T* newData = new T[newCapacity];
+    int n = std::min(size, newCapacity);
+    for (int i = 0; i < n; ++i) {
+        newData[i] = data[i];
+    }
+    delete[] data;
+    data = newData;
+    capacity = newCapacity;
+    size = n; // Update size if the new capacity is smaller than the current size
 }
 
 template<typename T>
