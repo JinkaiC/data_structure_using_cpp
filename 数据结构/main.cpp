@@ -20,7 +20,7 @@ void testMyArray() {
 
 void testMyDynamicArray() {
 	std::cout << "Testing MyDynamicArray..." << std::endl;
-	MyDynamicArray<int> arr;
+	MyDynamicArray<int> arr(50);
 	arr.addToEnd(0);
 	arr.addToEnd(2);
 	arr.addInPlace(1, 1);
@@ -29,6 +29,7 @@ void testMyDynamicArray() {
 	MyDynamicArray<int> newarr(arr);
 	newarr.readArray();
 	newarr.addInPlace(3, 3);
+	newarr.addToEnd(4);
 	newarr.readArray();
 	arr.remove(2);
 	arr.readArray();
