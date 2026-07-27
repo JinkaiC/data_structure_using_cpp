@@ -2,9 +2,10 @@
 #include <iostream>
 #include <algorithm>   // 用于 std::min
 
+template<typename T>
 class MyArray {
 private:
-    int* data;
+    T* data;
     int size;
     int capacity;
     static const int POUTOFRANGEERROR;
@@ -17,9 +18,12 @@ public:
     // 复制构造函数（参数：旧对象和目标容量）
     MyArray(const MyArray& old, int capacity);
 
+    //析构函数
+    ~MyArray();
+
     // 获取数组已存数据量
     int getSize();
-    // 获取数组容量（注意：sizeof(data) 返回指针大小，不是实际容量）
+    // 获取数组容量
     int getCapacity();
     // 判断空数组
     bool isEmpty();
@@ -33,18 +37,289 @@ public:
     paras:  n:输入的元素
 	        p:插入位置
     */
-    void addInPlace(int n, int p);
+    void addInPlace(T n, int p);
     // 在末尾添加元素
-    void addToEnd(int e);
+    void addToEnd(T e) { addInPlace(e, size); }
     // 在头部添加元素
-    void addToBegin(int b);
+    void addToBegin(T b) { addInPlace(b, 0); }
 
     //获取p位置的元素
-    int get(int p);
+    T get(int p);
 
     //修改指定位置p的元素为n
-    int set(int n, int p);
+    void set(T n, int p);
+
+    //确定数组中是否存在元素e
+    bool contain(T e);
+
+    //寻找元素e，返回第一个e位置的索引，若未找到返回-1
+    int find(T e);
+
+	//删除指定位置p的元素,返回成功删除的元素，若删除失败返回默认值
+	T remove(int p);
+
+    //删除并返回头元素
+	T removeFromBegin() { return remove(0); }
+    //删除并返回尾元素
+	T removeFromEnd() { return remove(size - 1); }
+
+    //删除指定元素e一次
+    bool removeElementOnce(T e);
 
     // 输出数组元素
     void readArray();
 };
+
+//实现
+
+// 静态成员变量的定义（必须在 .cpp 中定义，否则链接报错）
+template<typename T>
+const int MyArray<T>::POUTOFRANGEERROR = -1;
+
+template<typename T>
+const int MyArray<T>::POUTOFSIZEERROR = -2;
+
+template<typename T>
+const int MyArray<T>::FULLARRAYERROR = -3;
+
+// 构造函数
+template<typename T>
+MyArray<T>::MyArray(int capacity) {
+    MyArray::capacity = capacity;
+    data = new int[capacity];
+    size = 0;
+}
+
+// 构造函数，复制原数组，可变大小
+template<typename T>
+MyArray<T>::MyArray(const MyArray& old, int capacity) {
+    MyArray::capacity = capacity;
+    data = new int[capacity];
+    int n = std::min(old.size, capacity);
+    for (int i = 0; i < n; i++) {
+        data[i] = old.data[i];
+    }
+    size = n;
+}
+
+// 析构函数
+template<typename T>
+MyArray<T>::~MyArray() {
+    delete[] data;
+}
+
+template<typename T>
+int MyArray<T>::getSize() {
+    return size;
+}
+
+template<typename T>
+int MyArray<T>::getCapacity() {
+    return capacity;
+}
+
+template<typename T>
+bool MyArray<T>::isEmpty() {
+    return size == 0;
+}
+
+template<typename T>
+bool MyArray<T>::isFull() {
+    return capacity == size;
+}
+
+template<typename T>
+bool MyArray<T>::pIsOutOfRange(int p) {
+    return p < 0 || p >= capacity;
+}
+
+template<typename T>
+void MyArray<T>::addInPlace(T n, int p) {
+    try {
+        if (pIsOutOfRange(p)) {
+            throw POUTOFRANGEERROR;
+        }
+        else if (isFull()) {
+            throw FULLARRAYERROR;
+        }
+        else {
+            for (int i = size - 1; i >= p; --i) {
+                data[i + 1] = data[i];
+            }
+            data[p] = n;
+            ++size;
+        }
+    }
+    catch (int e) {
+        if (e == FULLARRAYERROR) {
+            std::cout << "error happened in addInPlace!\n";
+            std::cout << "capacity = " << getCapacity() << "\n";
+            std::cout << "space is full, you may try to create a biggger array.\n";
+        }
+        if (e == POUTOFRANGEERROR) {
+            std::cout << "error happened in addInPlace!\n";
+            std::cout << "capacity = " << getCapacity() << "\n";
+            std::cout << "the index p is out of range!\n";
+        }
+    }
+    catch (...) {
+        std::cout << "errors happened in addInPlace\n";
+        std::cout << "errors not defined in class MyArrayP happened.\n";
+		throw std::logic_error("Unexpected error in addInPlace function"); // Rethrow as a standard exception
+    }
+}
+
+//template<typename T>
+//void MyArray<T>::addToEnd(T e) {
+//    addInPlace(e, size);
+//}
+//
+//template<typename T>
+//void MyArray<T>::addToBegin(T b) {
+//    addInPlace(b, 0);
+//}
+
+template<typename T>
+T MyArray<T>::get(int p) {
+    try {
+        if (pIsOutOfRange(p)) {
+            throw POUTOFRANGEERROR;
+        }
+        else if (p >= size) {
+            throw POUTOFSIZEERROR;
+        }
+        else {
+            return data[p];
+        }
+    }
+    catch (int e) {
+        if (e == POUTOFRANGEERROR) {
+            std::cout << "error happened in get!\n";
+            std::cout << "capacity = " << getCapacity() << "\n";
+            std::cout << "the index p is out of range!\n";
+        }
+        else if (e == POUTOFSIZEERROR) {
+            std::cout << "error happened in get!\n";
+            std::cout << "size = " << getSize() << "\n";
+            std::cout << "the index p is out of the size of the array!\n";
+        }
+    }
+    catch (...) {
+        std::cout << "errors happened in get\n";
+        std::cout << "errors not defined in class MyArrayP happened.\n";
+		throw std::logic_error("Unexpected error in get function"); // Rethrow as a standard exception
+    }
+}
+
+template<typename T>
+void MyArray<T>::set(T n, int p) {
+    try {
+        if (pIsOutOfRange(p)) {
+            throw POUTOFRANGEERROR;
+        }
+        else if (p >= size) {
+            throw POUTOFSIZEERROR;
+        }
+        else {
+            data[p] = n;
+            return;
+        }
+    }
+    catch (int e) {
+        if (e == POUTOFRANGEERROR) {
+            std::cout << "error happened in set!\n";
+            std::cout << "capacity = " << getCapacity() << "\n";
+            std::cout << "the index p is out of range!\n";
+        }
+        else if (e == POUTOFSIZEERROR) {
+            std::cout << "error happened in set!\n";
+            std::cout << "size = " << getSize() << "\n";
+            std::cout << "the index p is out of the size of the array!\n";
+        }
+    }
+    catch (...) {
+        std::cout << "errors happened in set\n";
+        std::cout << "errors not defined in class MyArrayP happened.\n";
+		throw std::logic_error("Unexpected error in set function"); // Rethrow as a standard exception
+    }
+}
+
+template<typename T>
+bool MyArray<T>::contain(T e) {
+    for (int i = 0; i < size; i++) {
+        if (data[i] == e) {
+            return true;
+        }
+    }
+    return false;
+}
+
+template<typename T>
+int MyArray<T>::find(T e) {
+    for (int i = 0; i < size; i++) {
+        if (data[i] == e) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+template<typename T>
+T MyArray<T>::remove(int p) {
+    try {
+        if(pIsOutOfRange(p)) {
+            throw POUTOFRANGEERROR;
+        }
+        else if (p >= size) {
+            throw POUTOFSIZEERROR;
+        }
+        else {
+			T oldValue = data[p];
+            for (int i = p; i < size - 1; ++i) {
+                data[i] = data[i + 1];
+            }
+            --size;
+            return oldValue;
+		}
+    }
+    catch (int e) {
+        if (e == POUTOFRANGEERROR) {
+            std::cout << "error happened in remove!\n";
+            std::cout << "capacity = " << getCapacity() << "\n";
+            std::cout << "the index p is out of range!\n";
+        }
+        else if (e == POUTOFSIZEERROR) {
+            std::cout << "error happened in remove!\n";
+            std::cout << "size = " << getSize() << "\n";
+            std::cout << "the index p is out of the size of the array!\n";
+        }
+        std::cout << "remove function failed, returning default value.\n";
+        return T();
+    }
+    catch (...) {
+        std::cout << "errors happened in remove\n";
+        std::cout << "errors not defined in class MyArrayP happened.\n";
+		throw std::logic_error("Unexpected error in remove function"); // Rethrow as a standard exception
+	}
+}
+
+template<typename T>
+bool MyArray<T>::removeElementOnce(T e) {
+	int i = find(e);
+    if(i==-1) {
+        return false;
+    }
+    else {
+        remove(i);
+        return true;
+	}
+}
+
+template<typename T>
+void MyArray<T>::readArray() {
+    std::cout << "capacity = " << capacity << ", size = " << size << "\n";
+    for (int i = 0; i < size; ++i) {
+        std::cout << data[i] << " ";
+    }
+    std::cout << '\n';
+}
