@@ -15,8 +15,28 @@ protected:
 public:
     // 构造函数
     MyArray(int capacity = 10);
-    // 复制构造函数（参数：旧对象和目标容量）
+    // 另一构造函数（参数：旧对象和目标容量）
     MyArray(const MyArray& old, int capacity);
+    // 拷贝构造函数（深拷贝）
+    MyArray(const MyArray& other) {
+        capacity = other.capacity;
+        size = other.size;
+        data = new T[capacity];
+        std::copy(other.data, other.data + size, data);
+    }
+
+    // 拷贝赋值运算符（深拷贝）
+    MyArray& operator=(const MyArray& other) {
+        if (this != &other) {
+            T* newData = new T[other.capacity];
+            std::copy(other.data, other.data + other.size, newData);
+            delete[] data;
+            data = newData;
+            size = other.size;
+            capacity = other.capacity;
+        }
+        return *this;
+    }
 
     //析构函数
     ~MyArray();
@@ -42,12 +62,22 @@ public:
     */
     void addInPlace(T n, int p);
     // 在末尾添加元素
-    void addToEnd(T e) { addInPlace(e, size); }
+    void addLast(T e) { 
+		std::cout << "using base class addLast" << "\n";
+        addInPlace(e, size); 
+    }
     // 在头部添加元素
-    void addToBegin(T b) { addInPlace(b, 0); }
+    void addFirst(T b) { 
+		std::cout << "using base class addFirst" << "\n";
+        addInPlace(b, 0); 
+    }
 
     //获取p位置的元素
     T get(int p);
+
+    //获取头尾元素
+	T getFirst() { return get(0); }
+	T getLast() { return get(size - 1); }
 
     //修改指定位置p的元素为n
     void set(T n, int p);
@@ -62,9 +92,15 @@ public:
 	T remove(int p);
 
     //删除并返回头元素
-	T removeFromBegin() { return remove(0); }
+	T removeFirst() { 
+		std::cout << "using base class removeFirst" << "\n";
+        return remove(0); 
+    }
     //删除并返回尾元素
-	T removeFromEnd() { return remove(size - 1); }
+	T removeLast() { 
+		std::cout << "using base class removeLast" << "\n";
+        return remove(size - 1); 
+    }
 
     //删除指定元素e一次
     bool removeElementOnce(T e);
@@ -89,7 +125,7 @@ const int MyArray<T>::FULLARRAYERROR = -3;
 template<typename T>
 MyArray<T>::MyArray(int capacity) {
     MyArray::capacity = capacity;
-    data = new int[capacity];
+    data = new T[capacity];
     size = 0;
 }
 
@@ -152,12 +188,14 @@ void MyArray<T>::resize(int newCapacity) {
     delete[] data;
     data = newData;
     capacity = newCapacity;
+    std::cout << capacity << "\n";
     size = n; // Update size if the new capacity is smaller than the current size
 }
 
 template<typename T>
 void MyArray<T>::addInPlace(T n, int p) {
     try {
+		std::cout << "using base class addInPlace" << "\n";
         if (pIsOutOfRange(p)) {
             throw POUTOFRANGEERROR;
         }
@@ -192,12 +230,12 @@ void MyArray<T>::addInPlace(T n, int p) {
 }
 
 //template<typename T>
-//void MyArray<T>::addToEnd(T e) {
+//void MyArray<T>::addLast(T e) {
 //    addInPlace(e, size);
 //}
 //
 //template<typename T>
-//void MyArray<T>::addToBegin(T b) {
+//void MyArray<T>::addFirst(T b) {
 //    addInPlace(b, 0);
 //}
 
@@ -225,6 +263,8 @@ T MyArray<T>::get(int p) {
             std::cout << "size = " << getSize() << "\n";
             std::cout << "the index p is out of the size of the array!\n";
         }
+		std::cout << "get function failed, returning default value.\n";
+		return T(); // Return default value of T in case of error
     }
     catch (...) {
         std::cout << "errors happened in get\n";
@@ -339,9 +379,14 @@ bool MyArray<T>::removeElementOnce(T e) {
 
 template<typename T>
 void MyArray<T>::readArray() {
+    std::cout << "\n";
     std::cout << "capacity = " << capacity << ", size = " << size << "\n";
+	std::cout << "Array elements: [";
     for (int i = 0; i < size; ++i) {
-        std::cout << data[i] << " ";
+        std::cout << data[i];
+        if (i < size - 1) {
+            std::cout << ", ";
+		}
     }
-    std::cout << '\n';
+    std::cout << "]\n";
 }
