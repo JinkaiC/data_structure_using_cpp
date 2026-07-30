@@ -11,7 +11,6 @@ protected:
     static const int POUTOFRANGEERROR;
     static const int POUTOFSIZEERROR;
     static const int FULLARRAYERROR;
-
 public:
     // 构造函数
     MyArray(int capacity = 10);
@@ -28,12 +27,12 @@ public:
     // 拷贝赋值运算符（深拷贝）
     MyArray& operator=(const MyArray& other) {
         if (this != &other) {
+            size = other.size;
+            capacity = other.capacity;
             T* newData = new T[other.capacity];
             std::copy(other.data, other.data + other.size, newData);
             delete[] data;
             data = newData;
-            size = other.size;
-            capacity = other.capacity;
         }
         return *this;
     }
@@ -63,12 +62,12 @@ public:
     void addInPlace(T n, int p);
     // 在末尾添加元素
     void addLast(T e) { 
-		std::cout << "using base class addLast" << "\n";
+		//std::cout << "using base class addLast" << "\n";
         addInPlace(e, size); 
     }
     // 在头部添加元素
     void addFirst(T b) { 
-		std::cout << "using base class addFirst" << "\n";
+		//std::cout << "using base class addFirst" << "\n";
         addInPlace(b, 0); 
     }
 
@@ -93,12 +92,12 @@ public:
 
     //删除并返回头元素
 	T removeFirst() { 
-		std::cout << "using base class removeFirst" << "\n";
+		//std::cout << "using base class removeFirst" << "\n";
         return remove(0); 
     }
     //删除并返回尾元素
 	T removeLast() { 
-		std::cout << "using base class removeLast" << "\n";
+		//std::cout << "using base class removeLast" << "\n";
         return remove(size - 1); 
     }
 
@@ -133,12 +132,10 @@ MyArray<T>::MyArray(int capacity) {
 template<typename T>
 MyArray<T>::MyArray(const MyArray& old, int capacity) {
     MyArray::capacity = capacity;
-    data = new int[capacity];
+    data = new T[capacity];
     int n = std::min(old.size, capacity);
-    for (int i = 0; i < n; i++) {
-        data[i] = old.data[i];
-    }
     size = n;
+	std::copy(old.data, old.data + n, data);
 }
 
 // 析构函数
@@ -188,17 +185,20 @@ void MyArray<T>::resize(int newCapacity) {
     delete[] data;
     data = newData;
     capacity = newCapacity;
-    std::cout << capacity << "\n";
+    //std::cout << capacity << "\n";
     size = n; // Update size if the new capacity is smaller than the current size
 }
 
 template<typename T>
 void MyArray<T>::addInPlace(T n, int p) {
     try {
-		std::cout << "using base class addInPlace" << "\n";
+		//std::cout << "using base class addInPlace" << "\n";
         if (pIsOutOfRange(p)) {
             throw POUTOFRANGEERROR;
         }
+        else if(p >= size) {
+            throw POUTOFSIZEERROR;
+		}
         else if (isFull()) {
             throw FULLARRAYERROR;
         }
@@ -221,6 +221,11 @@ void MyArray<T>::addInPlace(T n, int p) {
             std::cout << "capacity = " << getCapacity() << "\n";
             std::cout << "the index p is out of range!\n";
         }
+        if(e == POUTOFSIZEERROR) {
+            std::cout << "error happened in addInPlace!\n";
+            std::cout << "size = " << getSize() << "\n";
+            std::cout << "the index p is out of the size of the array!\n";
+		}
     }
     catch (...) {
         std::cout << "errors happened in addInPlace\n";

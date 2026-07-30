@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="MyArray.h" />
     <ClInclude Include="MyDynamicArray.h" />
+    <ClInclude Include="MyQueue.h" />
     <ClInclude Include="MyStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

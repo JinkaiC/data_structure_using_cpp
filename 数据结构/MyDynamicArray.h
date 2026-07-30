@@ -15,19 +15,27 @@ public:
     //构造函数，默认容量为10，调用父类构造函数
     MyDynamicArray(int capacity = 10) : MyArray<T>(capacity) {}
 
-    //复制构造函数(与父类对比，不需要传入capacity参数)
-    MyDynamicArray(const MyDynamicArray<T>& other) : MyArray<T>(other.capacity) {
-        this->size = other.size;
-        for (int i = 0; i < this->size; ++i) {
-            this->data[i] = other.data[i];
-        }
+    //复制构造函数
+    MyDynamicArray(const MyDynamicArray<T>& other) : MyArray<T>(other) {
+		//使用父类的复制构造函数即可
+		//由于子类无需额外的成员变量，因此不需要额外的操作
     }
+
+
+    //赋值运算符：使用父类的赋值运算符即可
+    MyDynamicArray<T>& operator=(const MyDynamicArray<T>& other) {
+        MyArray<T>::operator=(other);
+        return *this;
+	}
 
     //添加元素n到位置p，空间不足时，动态扩容
     void addInPlace(T n, int p) {
         try {
             if (p<0 || p>this->capacity) {
                 throw MyArray<T>::POUTOFRANGEERROR;
+            }
+            else if (p > this->size) {
+                throw MyArray<T>::POUTOFSIZEERROR;
             }
             else {
                 if (this->isFull()) {
@@ -46,6 +54,11 @@ public:
                 std::cout << "capacity = " << this->capacity << "\n";
                 std::cout << "the index p is out of range!\n";
             }
+            if (e == MyArray<T>::POUTOFSIZEERROR) {
+                std::cout << "error happened in addInPlace!\n";
+                std::cout << "size = " << this->size << "\n";
+                std::cout << "the index p is out of size!\n";
+			}
         }
         catch (...) {
             std::cout << "errors happened in addInPlace\n";

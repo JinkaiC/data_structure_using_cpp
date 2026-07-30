@@ -19,7 +19,7 @@ protected:
 	int capacity; // 栈的容量
 
 public:
-	~MyStack() {}
+	virtual ~MyStack() {}
 	virtual void push(T e) = 0; // 入栈操作
 	virtual T pop() = 0; // 出栈操作
 	virtual T peek() = 0; // 获取栈顶元素

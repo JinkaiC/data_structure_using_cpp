@@ -1,6 +1,7 @@
 #include "MyArray.h"
 #include "MyDynamicArray.h"
 #include "MyStack.h"
+#include "MyQueue.h"
 
 void testMyArray() {
 	std::cout << "Testing MyArray..." << std::endl;
@@ -66,9 +67,35 @@ void testMyArrayStack() {
 	std::cout << "Finished testing MyArrayStack." << std::endl;
 }
 
+void testMyQueue() {
+	std::cout << "Testing MyQueue..." << std::endl;
+	MyArrayQueue<int> queue;
+	for(int i=1;i<=40;i++){
+		queue.enqueue(i);
+		if (i % 10 == 0) {
+			queue.readMyQueue();
+		}
+	}
+	for (int i = 1; i <= 39; i++) {
+		int presentDequeueElement = queue.dequeue();
+		if(i%10==0){
+			queue.readMyQueue();
+			std::cout << "Front element: " << queue.getFront() << std::endl;
+		}
+	}
+	std::cout << queue.getFront() << std::endl;
+	while (!queue.isEmpty())
+	{
+		queue.dequeue();
+	}
+	queue.readMyQueue();
+	std::cout << "Finished testing MyQueue." << std::endl;
+}
+
 int main() {
 	//testMyArray();
 	//testMyDynamicArray();
-	testMyArrayStack();
+	//testMyArrayStack();
+	testMyQueue();
 	return 0;
 }
