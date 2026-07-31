@@ -76,5 +76,107 @@ public:
 	}
 };
 
+template <typename T>
+class MyLoopQueue : public MyQueue<T> {
+private:
+	int front;
+	int tail;
+	int size;
+	int capacity;
+	T* array; //使用T*指针实现循环队列
+	void resize(int newCapacity) {//resize函数只用于自身扩容缩容，不在外部调用，只需注意其在类内的逻辑
+		T* newArray = new T[newCapacity + 1];
+		for(int i=0;i<size;i++){
+			newArray[i] = array[(front + i) % (capacity+1)];
+		}
+		delete[] array;
+		array = new T[newCapacity + 1];
+		std::copy(newArray, newArray + size, array);
+		front = 0;
+		tail = size;
+		capacity = newCapacity;
+	}
+public:
+	MyLoopQueue(int capacity = 10) : front(0), tail(0), size(0), capacity(capacity) { array = new T[capacity + 1]; }//因为循环队列需要一个额外的空间来区分队列满和队列空的情况，所以在初始化时，容量需要加1。
+	MyLoopQueue(const MyLoopQueue& other) : front(other.front), tail(other.tail), size(other.size), capacity(other.capacity) { 
+		delete[] array;
+		array = new T[other.capacity + 1];
+		std::copy(other.array, other.array + size, array); 
+	}
+	~MyLoopQueue() { delete[] array; }
+	MyLoopQueue& operator=(const MyLoopQueue& other) {
+		if(this != &other) {
+			front = other.front;
+			tail = other.tail;
+			size = other.size;
+			capacity = other.capacity;
+			delete[] array;
+			array = new T[other.capacity + 1];
+			std::copy(other.array, other.array + size, array);
+		}
+		return *this;
+	}
+	//enqueue dequeue getFront getSize isEmpty readMyQueue
+	int getCapacity() {
+		return capacity;
+	}
+	void enqueue(T value) override {
+		if (isFull()) {
+			resize(2 * capacity);//扩容后头在0，尾在size
+		}
+		array[tail] = value;
+		tail = (tail + 1) % (capacity + 1);
+		size++;
+	}
+	T dequeue() override {
+		if (!isEmpty()) {
+			T ret = array[front];
+			front = (front + 1) % (capacity + 1);
+			size--;
+			//动态缩容
+			if (size <= (capacity + 1) / 4 && (capacity + 1) / 2 >= 10) {
+				resize((capacity + 1) / 2);
+			}
+			return ret;
+		}
+		else {//报错
+			std::cout << "MyLoopQueue is empty, cannot dequeue" << std::endl;
+			std::cout << "return default value" << std::endl;
+			return T();
+		}
+	}
+	T getFront() override {
+		if (!isEmpty()) {
+			return array[front];
+		}
+		else {//报错
+			std::cout << "MyLoopQueue is empty, cannot getFront" << std::endl;
+			std::cout << "return default value" << std::endl;
+			return T();
+		}
+	}
+	int getSize() override {
+		return size;
+	}
+	bool isFull() {
+		return front == (tail + 1) % (capacity+1);
+	}
+	bool isEmpty() override {
+		return front == tail;
+	}
+	void readMyQueue() override {
+		std::cout<< "\n";
+		std::cout << "This is a loop queue" << "\n";
+		std::cout << "MyLoopQueue: size = " << this->getSize() << ", MyLoopQueue capacity = " << this->getCapacity() << std::endl;
+		std::cout << "MyLoopQueue: front(" << front << ")[";
+		for(int i = front; i != tail; i=(i+1)% (capacity + 1)) {
+			std::cout << array[i];
+			if (i != (tail+ (capacity + 1) - 1)% (capacity + 1)) {
+				std::cout << ", ";
+			}
+		}
+		std::cout << "] tail(" << tail << ")" << std::endl;
+	}
 
+};
 

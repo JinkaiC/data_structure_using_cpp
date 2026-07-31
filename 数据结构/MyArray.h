@@ -196,7 +196,7 @@ void MyArray<T>::addInPlace(T n, int p) {
         if (pIsOutOfRange(p)) {
             throw POUTOFRANGEERROR;
         }
-        else if(p >= size) {
+        else if(p > size) {
             throw POUTOFSIZEERROR;
 		}
         else if (isFull()) {
