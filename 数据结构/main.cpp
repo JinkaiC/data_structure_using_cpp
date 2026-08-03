@@ -2,6 +2,7 @@
 #include "MyDynamicArray.h"
 #include "MyStack.h"
 #include "MyQueue.h"
+#include "MyLinkedList.h"
 
 void testMyArray() {
 	std::cout << "Testing MyArray..." << std::endl;
@@ -198,11 +199,112 @@ void testMyLoopQueue() {
     std::cout << "Finished testing MyLoopQueue." << std::endl;
 }
 
+void testMyNoRingLinkedList() {
+    std::cout << "Testing MyNoRingLinkedList..." << std::endl;
+
+    // ---------- 1. 构造与基本操作 ----------
+    MyNoRingLinkedList<int> list;
+    std::cout << "Empty? " << list.isEmpty() << ", size = " << list.getSize() << std::endl;
+
+    // addFirst, addLast, addInPlace
+    list.addFirst(10);
+    list.addLast(30);
+    list.addInPlace(1, 20);   // 10,20,30
+    list.addInPlace(0, 5);    // 5,10,20,30
+    list.addInPlace(4, 40);   // 5,10,20,30,40
+    std::cout << "After inserts (size=" << list.getSize() << "): ";
+    for (int i = 0; i < list.getSize(); ++i) {
+        std::cout << list.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    // getFirst, getLast
+    std::cout << "First: " << list.getFirst() << ", Last: " << list.getLast() << std::endl;
+
+    // set
+    list.set(2, 99);   // 5,10,99,30,40
+    std::cout << "After set(2,99): ";
+    for (int i = 0; i < list.getSize(); ++i) {
+        std::cout << list.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    // contains
+    std::cout << "Contains 99? " << list.contains(99) << std::endl;
+    std::cout << "Contains 100? " << list.contains(100) << std::endl;
+
+    // ---------- 2. 边界测试 ----------
+    std::cout << "\n--- Edge cases ---" << std::endl;
+    // 空链表 get
+    MyNoRingLinkedList<int> emptyList;
+    std::cout << "Empty list get(0): " << emptyList.get(0) << std::endl; // 越界，打印错误并返回0
+    // 越界插入
+    emptyList.addInPlace(5, 100); // 打印错误
+    // 删除不存在（该类没有删除方法，但可以测试 set 越界）
+    emptyList.set(0, 100); // 打印错误
+
+    // ---------- 3. 拷贝构造与赋值 ----------
+    std::cout << "\n--- Copy constructor and assignment ---" << std::endl;
+    MyNoRingLinkedList<int> list2 = list; // 拷贝构造
+    std::cout << "Copied list: ";
+    for (int i = 0; i < list2.getSize(); ++i) {
+        std::cout << list2.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    MyNoRingLinkedList<int> list3;
+    list3 = list; // 赋值
+	std::cout << list.getSize() << "    " << list2.getSize() << "    " << list3.getSize() << std::endl;
+    std::cout << "Assigned list: ";
+    for (int i = 0; i < list3.getSize(); ++i) {
+        std::cout << list3.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    // 修改原列表，不影响拷贝/赋值
+    list.addLast(999);
+    std::cout << "Original after adding 999: ";
+    for (int i = 0; i < list.getSize(); ++i) {
+        std::cout << list.get(i) << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Copied list unchanged: ";
+    for (int i = 0; i < list2.getSize(); ++i) {
+        std::cout << list2.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    // ---------- 4. 数组构造 ----------
+    std::cout << "\n--- Array constructor ---" << std::endl;
+    int arr[] = { 1, 2, 3, 4, 5 };
+    MyNoRingLinkedList<int> listFromArray(arr, 5);
+    std::cout << "From array: ";
+    for (int i = 0; i < listFromArray.getSize(); ++i) {
+        std::cout << listFromArray.get(i) << " ";
+    }
+    std::cout << std::endl;
+
+    // ---------- 5. 大量操作（测试性能与内存） ----------
+    std::cout << "\n--- Large operations ---" << std::endl;
+    MyNoRingLinkedList<int> bigList;
+    for (int i = 0; i < 100; ++i) {
+        bigList.addLast(i);
+    }
+    std::cout << "Big list size: " << bigList.getSize() << std::endl;
+    // 检查一些值
+    std::cout << "bigList.get(50) = " << bigList.get(50) << std::endl;
+    std::cout << "bigList.contains(99) = " << bigList.contains(99) << std::endl;
+    std::cout << "bigList.contains(100) = " << bigList.contains(100) << std::endl;
+
+    std::cout << "Finished testing MyNoRingLinkedList." << std::endl;
+}
+
 int main() {
 	//testMyArray();
 	//testMyDynamicArray();
 	//testMyArrayStack();
 	//testMyArrayQueue();
-    testMyLoopQueue();
+    //testMyLoopQueue();
+    testMyNoRingLinkedList();
 	return 0;
 }
