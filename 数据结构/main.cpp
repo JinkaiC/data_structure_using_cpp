@@ -1,8 +1,9 @@
-#include "MyArray.h"
+ï»¿#include "MyArray.h"
 #include "MyDynamicArray.h"
 #include "MyStack.h"
 #include "MyQueue.h"
 #include "MyLinkedList.h"
+#include "MyBST.h"
 
 void testMyArray() {
 	std::cout << "Testing MyArray..." << std::endl;
@@ -96,54 +97,54 @@ void testMyArrayQueue() {
 void testMyLoopQueue() {
     std::cout << "Testing MyLoopQueue..." << std::endl;
 
-    // ---------- 1. »ù±¾Èë¶Ó³ö¶Ó ----------
-    MyLoopQueue<int> queue(10);  // ÓĞĞ§ÈİÁ¿Îª10£¬ÄÚ²¿ array ÈİÁ¿Îª11
+    // ---------- 1. åŸºæœ¬å…¥é˜Ÿå‡ºé˜Ÿ ----------
+    MyLoopQueue<int> queue(10);  // æœ‰æ•ˆå®¹é‡ä¸º10ï¼Œå†…éƒ¨ array å®¹é‡ä¸º11
     std::cout << "Initial capacity (effective): " << queue.getCapacity() << std::endl;
     std::cout << "Initial size: " << queue.getSize() << std::endl;
     queue.readMyQueue();
 
-    // Èë¶Ó 5 ¸öÔªËØ
+    // å…¥é˜Ÿ 5 ä¸ªå…ƒç´ 
     for (int i = 1; i <= 5; ++i) {
         queue.enqueue(i);
     }
     queue.readMyQueue();
     std::cout << "Front element: " << queue.getFront() << std::endl;
 
-    // ³ö¶Ó 3 ¸öÔªËØ
+    // å‡ºé˜Ÿ 3 ä¸ªå…ƒç´ 
     for (int i = 0; i < 3; ++i) {
         std::cout << "Dequeued: " << queue.dequeue() << std::endl;
     }
     queue.readMyQueue();
 
-    // ÔÙÈë¶Ó 5 ¸öÔªËØ£¬´ËÊ± tail »áÈÆ»Ø£¨ÒòÎªÖ®Ç°³ö¶ÓÌÚ³öÁË¿Õ¼ä£©
+    // å†å…¥é˜Ÿ 5 ä¸ªå…ƒç´ ï¼Œæ­¤æ—¶ tail ä¼šç»•å›ï¼ˆå› ä¸ºä¹‹å‰å‡ºé˜Ÿè…¾å‡ºäº†ç©ºé—´ï¼‰
     for (int i = 6; i <= 10; ++i) {
         queue.enqueue(i);
     }
     queue.readMyQueue();
     std::cout << "Front element: " << queue.getFront() << std::endl;
 
-    // ---------- 2. ²âÊÔÀ©Èİ ----------
-    // µ±Ç°¶ÓÁĞ size = 7 (1,2,3,4? Êµ¼ÊÉÏÎÒÃÇ³ö¶ÓÁË1,2,3£¬Ê£ÏÂ4,5£¬ÔÙÈë¶Ó6-10£¬ËùÒÔÓĞ4,5,6,7,8,9,10 ¹²7¸öÔªËØ)
-    // ÈİÁ¿ÊÇ10£¬»¹ÓĞ3¸ö¿ÕÎ»£¬¼ÌĞøÈë¶Óµ½Âú£¬ÔÙÈë¶Ó´¥·¢À©Èİ
+    // ---------- 2. æµ‹è¯•æ‰©å®¹ ----------
+    // å½“å‰é˜Ÿåˆ— size = 7 (1,2,3,4? å®é™…ä¸Šæˆ‘ä»¬å‡ºé˜Ÿäº†1,2,3ï¼Œå‰©ä¸‹4,5ï¼Œå†å…¥é˜Ÿ6-10ï¼Œæ‰€ä»¥æœ‰4,5,6,7,8,9,10 å…±7ä¸ªå…ƒç´ )
+    // å®¹é‡æ˜¯10ï¼Œè¿˜æœ‰3ä¸ªç©ºä½ï¼Œç»§ç»­å…¥é˜Ÿåˆ°æ»¡ï¼Œå†å…¥é˜Ÿè§¦å‘æ‰©å®¹
     std::cout << "\n--- Testing expansion ---" << std::endl;
     for (int i = 11; i <= 15; ++i) {
-        queue.enqueue(i);   // µÚ11¸öÈë¶ÓÊ±£¬¶ÓÁĞÂú£¨10¸öÔªËØ£©£¬ÔÙÈë¶Ó»áÀ©Èİµ½ÓĞĞ§ÈİÁ¿20
+        queue.enqueue(i);   // ç¬¬11ä¸ªå…¥é˜Ÿæ—¶ï¼Œé˜Ÿåˆ—æ»¡ï¼ˆ10ä¸ªå…ƒç´ ï¼‰ï¼Œå†å…¥é˜Ÿä¼šæ‰©å®¹åˆ°æœ‰æ•ˆå®¹é‡20
     }
     queue.readMyQueue();
     std::cout << "After expansion, capacity: " << queue.getCapacity() << ", size: " << queue.getSize() << std::endl;
 
-    // ÑéÖ¤ÔªËØË³ĞòÊÇ·ñÕıÈ·£ºÓ¦¸ÃÊÇ 4,5,6,7,8,9,10,11,12,13,14,15 (¹²12¸ö)
-    // ³ö¶Ó¼ì²é
+    // éªŒè¯å…ƒç´ é¡ºåºæ˜¯å¦æ­£ç¡®ï¼šåº”è¯¥æ˜¯ 4,5,6,7,8,9,10,11,12,13,14,15 (å…±12ä¸ª)
+    // å‡ºé˜Ÿæ£€æŸ¥
     std::cout << "Dequeue all elements: ";
     while (!queue.isEmpty()) {
         std::cout << queue.dequeue() << " ";
     }
     std::cout << std::endl;
-    queue.readMyQueue();  // Ó¦ÏÔÊ¾¿Õ
+    queue.readMyQueue();  // åº”æ˜¾ç¤ºç©º
 
-    // ---------- 3. ²âÊÔËõÈİ ----------
+    // ---------- 3. æµ‹è¯•ç¼©å®¹ ----------
     std::cout << "\n--- Testing shrinkage ---" << std::endl;
-    // ÖØĞÂÌî³ä 15 ¸öÔªËØ£¨³õÊ¼ÈİÁ¿10£¬»áÀ©Èİµ½20£©
+    // é‡æ–°å¡«å…… 15 ä¸ªå…ƒç´ ï¼ˆåˆå§‹å®¹é‡10ï¼Œä¼šæ‰©å®¹åˆ°20ï¼‰
     MyLoopQueue<int> queue2(10);
     for (int i = 1; i <= 15; ++i) {
         queue2.enqueue(i);
@@ -151,47 +152,47 @@ void testMyLoopQueue() {
     queue2.readMyQueue();
     std::cout << "Initial capacity after expansion: " << queue2.getCapacity() << std::endl;
 
-    // ³ö¶Ó´óÁ¿ÔªËØ£¬Ê¹ size < capacity/4 (20/4=5) ÇÒ capacity/2 >=10
-    for (int i = 0; i < 12; ++i) {  // ³ö¶Ó12¸ö£¬Ê£ÏÂ3¸ö
+    // å‡ºé˜Ÿå¤§é‡å…ƒç´ ï¼Œä½¿ size < capacity/4 (20/4=5) ä¸” capacity/2 >=10
+    for (int i = 0; i < 12; ++i) {  // å‡ºé˜Ÿ12ä¸ªï¼Œå‰©ä¸‹3ä¸ª
         queue2.dequeue();
     }
     queue2.readMyQueue();
     std::cout << "After dequeue 12 elements, capacity: " << queue2.getCapacity() << ", size: " << queue2.getSize() << std::endl;
-    // ´ËÊ± size=3£¬capacity=20£¬3 < 5£¬ÇÒ 20/2=10 >=10£¬Ó¦ËõÈİµ½10
-    // ÔÙ³ö¶ÓÒ»¸ö£¬´¥·¢ËõÈİÌõ¼ş¼ì²é£¨Ã¿´Î³ö¶Ó¶¼»á¼ì²é£©
+    // æ­¤æ—¶ size=3ï¼Œcapacity=20ï¼Œ3 < 5ï¼Œä¸” 20/2=10 >=10ï¼Œåº”ç¼©å®¹åˆ°10
+    // å†å‡ºé˜Ÿä¸€ä¸ªï¼Œè§¦å‘ç¼©å®¹æ¡ä»¶æ£€æŸ¥ï¼ˆæ¯æ¬¡å‡ºé˜Ÿéƒ½ä¼šæ£€æŸ¥ï¼‰
     queue2.dequeue();
     queue2.readMyQueue();
     std::cout << "After one more dequeue, capacity: " << queue2.getCapacity() << ", size: " << queue2.getSize() << std::endl;
-    // ´ËÊ± size=2£¬capacity Ó¦Îª10£¨ÒòÎªËõÈİµ½10£©
+    // æ­¤æ—¶ size=2ï¼Œcapacity åº”ä¸º10ï¼ˆå› ä¸ºç¼©å®¹åˆ°10ï¼‰
 
-    // ---------- 4. ±ß½çÇé¿ö ----------
+    // ---------- 4. è¾¹ç•Œæƒ…å†µ ----------
     std::cout << "\n--- Testing edge cases ---" << std::endl;
     MyLoopQueue<int> emptyQueue(5);
-    // ¿Õ¶ÓÁĞ³ö¶ÓºÍÈ¡¶ÓÊ×
+    // ç©ºé˜Ÿåˆ—å‡ºé˜Ÿå’Œå–é˜Ÿé¦–
     std::cout << "Dequeue from empty: " << emptyQueue.dequeue() << std::endl;
     std::cout << "GetFront from empty: " << emptyQueue.getFront() << std::endl;
     emptyQueue.readMyQueue();
 
-    // Èë¶Ó³¬³öÈİÁ¿µ«Î´Âú£¿Êµ¼ÊÉÏÈë¶Óµ½Âúºó¼ÌĞøÈë¶Ó»á×Ô¶¯À©Èİ£¬²»»á³ö´í
+    // å…¥é˜Ÿè¶…å‡ºå®¹é‡ä½†æœªæ»¡ï¼Ÿå®é™…ä¸Šå…¥é˜Ÿåˆ°æ»¡åç»§ç»­å…¥é˜Ÿä¼šè‡ªåŠ¨æ‰©å®¹ï¼Œä¸ä¼šå‡ºé”™
 
-    // ---------- 5. ¿½±´¹¹ÔìºÍ¸³Öµ²âÊÔ ----------
+    // ---------- 5. æ‹·è´æ„é€ å’Œèµ‹å€¼æµ‹è¯• ----------
     std::cout << "\n--- Testing copy constructor and assignment ---" << std::endl;
     MyLoopQueue<int> queue3(10);
     for (int i = 1; i <= 7; ++i) queue3.enqueue(i);
     queue3.readMyQueue();
 
-    // ¿½±´¹¹Ôì
+    // æ‹·è´æ„é€ 
     MyLoopQueue<int> queue4 = queue3;
     queue4.readMyQueue();
     std::cout << "Original front: " << queue3.getFront() << ", copy front: " << queue4.getFront() << std::endl;
 
-    // ĞŞ¸Ä¿½±´²»Ó°ÏìÔ­¶ÔÏó
+    // ä¿®æ”¹æ‹·è´ä¸å½±å“åŸå¯¹è±¡
     queue4.dequeue();
     queue4.enqueue(100);
     queue3.readMyQueue();
     queue4.readMyQueue();
 
-    // ¸³Öµ
+    // èµ‹å€¼
     MyLoopQueue<int> queue5(3);
     queue5 = queue3;
     queue5.readMyQueue();
@@ -202,7 +203,7 @@ void testMyLoopQueue() {
 void testMyNoRingLinkedList() {
     std::cout << "Testing MyNoRingLinkedList..." << std::endl;
 
-    // ---------- 1. ¹¹ÔìÓë»ù±¾²Ù×÷ ----------
+    // ---------- 1. æ„é€ ä¸åŸºæœ¬æ“ä½œ ----------
     MyNoRingLinkedList<int> list;
     std::cout << "Empty? " << list.isEmpty() << ", size = " << list.getSize() << std::endl;
 
@@ -233,19 +234,19 @@ void testMyNoRingLinkedList() {
     std::cout << "Contains 99? " << list.contains(99) << std::endl;
     std::cout << "Contains 100? " << list.contains(100) << std::endl;
 
-    // ---------- 2. ±ß½ç²âÊÔ ----------
+    // ---------- 2. è¾¹ç•Œæµ‹è¯• ----------
     std::cout << "\n--- Edge cases ---" << std::endl;
-    // ¿ÕÁ´±í get
+    // ç©ºé“¾è¡¨ get
     MyNoRingLinkedList<int> emptyList;
-    std::cout << "Empty list get(0): " << emptyList.get(0) << std::endl; // Ô½½ç£¬´òÓ¡´íÎó²¢·µ»Ø0
-    // Ô½½ç²åÈë
-    emptyList.addInPlace(5, 100); // ´òÓ¡´íÎó
-    // É¾³ı²»´æÔÚ£¨¸ÃÀàÃ»ÓĞÉ¾³ı·½·¨£¬µ«¿ÉÒÔ²âÊÔ set Ô½½ç£©
-    emptyList.set(0, 100); // ´òÓ¡´íÎó
+    std::cout << "Empty list get(0): " << emptyList.get(0) << std::endl; // è¶Šç•Œï¼Œæ‰“å°é”™è¯¯å¹¶è¿”å›0
+    // è¶Šç•Œæ’å…¥
+    emptyList.addInPlace(5, 100); // æ‰“å°é”™è¯¯
+    // åˆ é™¤ä¸å­˜åœ¨ï¼ˆè¯¥ç±»æ²¡æœ‰åˆ é™¤æ–¹æ³•ï¼Œä½†å¯ä»¥æµ‹è¯• set è¶Šç•Œï¼‰
+    emptyList.set(0, 100); // æ‰“å°é”™è¯¯
 
-    // ---------- 3. ¿½±´¹¹ÔìÓë¸³Öµ ----------
+    // ---------- 3. æ‹·è´æ„é€ ä¸èµ‹å€¼ ----------
     std::cout << "\n--- Copy constructor and assignment ---" << std::endl;
-    MyNoRingLinkedList<int> list2 = list; // ¿½±´¹¹Ôì
+    MyNoRingLinkedList<int> list2 = list; // æ‹·è´æ„é€ 
     std::cout << "Copied list: ";
     for (int i = 0; i < list2.getSize(); ++i) {
         std::cout << list2.get(i) << " ";
@@ -253,7 +254,7 @@ void testMyNoRingLinkedList() {
     std::cout << std::endl;
 
     MyNoRingLinkedList<int> list3;
-    list3 = list; // ¸³Öµ
+    list3 = list; // èµ‹å€¼
 	std::cout << list.getSize() << "    " << list2.getSize() << "    " << list3.getSize() << std::endl;
     std::cout << "Assigned list: ";
     for (int i = 0; i < list3.getSize(); ++i) {
@@ -261,7 +262,7 @@ void testMyNoRingLinkedList() {
     }
     std::cout << std::endl;
 
-    // ĞŞ¸ÄÔ­ÁĞ±í£¬²»Ó°Ïì¿½±´/¸³Öµ
+    // ä¿®æ”¹åŸåˆ—è¡¨ï¼Œä¸å½±å“æ‹·è´/èµ‹å€¼
     list.addLast(999);
     std::cout << "Original after adding 999: ";
     for (int i = 0; i < list.getSize(); ++i) {
@@ -274,7 +275,7 @@ void testMyNoRingLinkedList() {
     }
     std::cout << std::endl;
 
-    // ---------- 4. Êı×é¹¹Ôì ----------
+    // ---------- 4. æ•°ç»„æ„é€  ----------
     std::cout << "\n--- Array constructor ---" << std::endl;
     int arr[] = { 1, 2, 3, 4, 5 };
     MyNoRingLinkedList<int> listFromArray(arr, 5);
@@ -284,14 +285,14 @@ void testMyNoRingLinkedList() {
     }
     std::cout << std::endl;
 
-    // ---------- 5. ´óÁ¿²Ù×÷£¨²âÊÔĞÔÄÜÓëÄÚ´æ£© ----------
+    // ---------- 5. å¤§é‡æ“ä½œï¼ˆæµ‹è¯•æ€§èƒ½ä¸å†…å­˜ï¼‰ ----------
     std::cout << "\n--- Large operations ---" << std::endl;
     MyNoRingLinkedList<int> bigList;
     for (int i = 0; i < 100; ++i) {
         bigList.addLast(i);
     }
     std::cout << "Big list size: " << bigList.getSize() << std::endl;
-    // ¼ì²éÒ»Ğ©Öµ
+    // æ£€æŸ¥ä¸€äº›å€¼
     std::cout << "bigList.get(50) = " << bigList.get(50) << std::endl;
     std::cout << "bigList.contains(99) = " << bigList.contains(99) << std::endl;
     std::cout << "bigList.contains(100) = " << bigList.contains(100) << std::endl;
@@ -299,12 +300,145 @@ void testMyNoRingLinkedList() {
     std::cout << "Finished testing MyNoRingLinkedList." << std::endl;
 }
 
+void testMyLinkedListStack() {
+    std::cout << "Testing MyLinkedListStack..." << std::endl;
+
+    // ---------- 1. åŸºæœ¬æ“ä½œ ----------
+    MyLinkedListStack<int> stack;
+    std::cout << "Initial size: " << stack.getSize() << ", empty? " << stack.isEmpty() << std::endl;
+
+    // å…¥æ ˆ 40 ä¸ªå…ƒç´ 
+    for (int i = 1; i <= 40; ++i) {
+        stack.push(i);
+        if (i % 10 == 0) {
+            std::cout << "After pushing " << i << ": ";
+            stack.readMyLinkedListStack();
+        }
+    }
+
+    // æŸ¥çœ‹æ ˆé¡¶
+    std::cout << "Peek top: " << stack.peek() << std::endl;
+
+    // ---------- 2. å‡ºæ ˆæ“ä½œ ----------
+    std::cout << "\n--- Pop operations ---" << std::endl;
+    for (int i = 1; i <= 39; ++i) {
+        int popped = stack.pop();
+        if (i % 10 == 0) {
+            std::cout << "After popping " << i << " times: ";
+            stack.readMyLinkedListStack();
+            std::cout << "Top element now: " << stack.peek() << std::endl;
+        }
+    }
+
+    // è¿˜å‰©ä¸€ä¸ªå…ƒç´ 
+    std::cout << "Remaining top: " << stack.peek() << std::endl;
+    std::cout << "Final size: " << stack.getSize() << std::endl;
+
+    // ---------- 3. æ¸…ç©ºæ ˆ ----------
+    std::cout << "\n--- Empty the stack ---" << std::endl;
+    while (!stack.isEmpty()) {
+        stack.pop();
+    }
+    stack.readMyLinkedListStack();
+    std::cout << "Size after empty: " << stack.getSize() << ", empty? " << stack.isEmpty() << std::endl;
+
+    // ---------- 4. è¾¹ç•Œæµ‹è¯•ï¼šç©ºæ ˆæ“ä½œ ----------
+    std::cout << "\n--- Edge cases ---" << std::endl;
+    MyLinkedListStack<int> emptyStack;
+    std::cout << "Peek on empty: " << emptyStack.peek() << std::endl;   // ä¾èµ–åº•å±‚ getFirst() å¤„ç†
+    std::cout << "Pop on empty: " << emptyStack.pop() << std::endl;     // ä¾èµ– removeFirst() å¤„ç†
+    emptyStack.readMyLinkedListStack();
+
+    // ---------- 5. å¤§é‡æ•°æ®æµ‹è¯•ï¼ˆæ€§èƒ½ï¼‰ ----------
+    std::cout << "\n--- Large data test ---" << std::endl;
+    MyLinkedListStack<int> bigStack;
+    for (int i = 0; i < 1000; ++i) {
+        bigStack.push(i);
+    }
+    std::cout << "Big stack size: " << bigStack.getSize() << std::endl;
+    for (int i = 0; i < 500; ++i) {
+        bigStack.pop();
+    }
+    std::cout << "After 500 pops, size: " << bigStack.getSize() << std::endl;
+    std::cout << "Top: " << bigStack.peek() << std::endl;
+
+    std::cout << "Finished testing MyLinkedListStack." << std::endl;
+}
+
+void testMyNRLLQueue() {
+    std::cout << "Testing MyNRLLQueue..." << std::endl;
+    // ---------- 1. åŸºæœ¬æ“ä½œ ----------
+    MyNRLLQueue<int> queue;
+    std::cout << "Initial size: " << queue.getSize() << ", empty? " << queue.isEmpty() << std::endl;
+    // å…¥é˜Ÿ 40 ä¸ªå…ƒç´ 
+    for (int i = 1; i <= 40; ++i) {
+        queue.enqueue(i);
+        if (i % 10 == 0) {
+            std::cout << "After enqueueing " << i << ": ";
+            queue.readMyQueue();
+        }
+    }
+    // æŸ¥çœ‹é˜Ÿé¦–
+    std::cout << "Front element: " << queue.getFront() << std::endl;
+    // ---------- 2. å‡ºé˜Ÿæ“ä½œ ----------
+    std::cout << "\n--- Dequeue operations ---" << std::endl;
+    for (int i = 1; i <= 39; ++i) {
+        int dequeued = queue.dequeue();
+        if (i % 10 == 0) {
+            std::cout << "After dequeueing " << i << " times: ";
+            queue.readMyQueue();
+            std::cout << "Front element now: " << queue.getFront() << std::endl;
+        }
+    }
+    // è¿˜å‰©ä¸€ä¸ªå…ƒç´ 
+    std::cout << "Remaining front: " << queue.getFront() << std::endl;
+    std::cout << "Final size: " << queue.getSize() << std::endl;
+    // ---------- 3. æ¸…ç©ºé˜Ÿåˆ— ----------
+    std::cout << "\n--- Empty the queue ---" << std::endl;
+    while (!queue.isEmpty()) {
+        queue.dequeue();
+    }
+    queue.readMyQueue();
+    std::cout << "Size after empty: " << queue.getSize() << ", empty? " << queue.isEmpty() << std::endl;
+    // ---------- 4. è¾¹ç•Œæµ‹è¯•ï¼šç©ºé˜Ÿåˆ—æ“ä½œ ----------
+    std::cout << "\n--- Edge cases ---" << std::endl;
+    MyNRLLQueue<int> emptyQueue;
+    std::cout << "GetFront on empty: " << emptyQueue.getFront() << std::endl;   // ä¾èµ–åº•å±‚ getFirst() å¤„ç†
+    std::cout << "Dequeue on empty: " << emptyQueue.dequeue() << std::endl;
+
+	std::cout << "\nFinished testing MyNRLLQueue." << std::endl;
+}
+
+void testMyBST() {
+	MyBST<int> bst;
+	int testValues[8] = { 50, 30, 70, 20, 40, 60, 80, 55 };
+    for(int v: testValues) {
+        bst.insert(v);
+	}
+    std::cout << "BST size: " << bst.getSize() << std::endl;
+    std::cout << "Contains 40? " << bst.contains(40) << std::endl;
+    std::cout << "Contains 100? " << bst.contains(100) << std::endl;
+
+    std::cout << "read MyBST:" << "\n";
+    std::cout << "\nPre-order traversal: ";
+    bst.readMyBST(0); // Pre-order
+    std::cout << "\nIn-order traversal: ";
+    bst.readMyBST(1); // In-order
+    std::cout << "\nPost-order traversal: ";
+    bst.readMyBST(2); // Post-order
+    std::cout << "\nLevel-order traversal: ";
+	bst.readMyBST(3); // Level-order
+}
+
 int main() {
-	//testMyArray();
-	//testMyDynamicArray();
-	//testMyArrayStack();
-	//testMyArrayQueue();
+    //testMyArray();
+    //testMyDynamicArray();
+    //testMyArrayStack();
+    //testMyArrayQueue();
     //testMyLoopQueue();
-    testMyNoRingLinkedList();
-	return 0;
+    //testMyNoRingLinkedList();
+    //testMyLinkedListStack();
+    //testMyNRLLQueue();
+    testMyBST();
+    return 0;
 }

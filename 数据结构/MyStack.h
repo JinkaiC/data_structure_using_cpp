@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "MyDynamicArray.h"
+#include "MyLinkedList.h"
 /*Stack: Last In First Out*/
 /***************
 栈的操作
@@ -15,8 +16,6 @@ bool isEmpty();
 template <typename T>
 class MyStack {
 protected:
-	MyDynamicArray<T> data; // 存储栈元素的数组，已经分配10个空间
-	int capacity; // 栈的容量
 
 public:
 	virtual ~MyStack() {}
@@ -30,7 +29,8 @@ public:
 template <typename T>
 class MyArrayStack : public MyStack<T> {//基于动态数组实现的栈
 private:
-
+	MyDynamicArray<T> data; // 存储栈元素的数组，已经分配10个空间
+	int capacity; // 栈的容量
 public:
 	MyArrayStack(int capacity = 10) {
 		this->capacity = capacity; // 默认容量为10
@@ -60,6 +60,43 @@ public:
 		std::cout << "Stack: [";
 		for(int i = 0; i < this->getSize(); i++) {
 			std::cout << this->data.get(i);
+			if (i != this->getSize() - 1) {
+				std::cout << ", ";
+			}
+		}
+		std::cout << "] top" << std::endl;
+	}
+};
+
+template <typename T>
+class MyLinkedListStack : public MyStack<T> {//基于链表实现的栈
+private:
+	MyNoRingLinkedList<T> list; // 存储栈元素的链表
+public:
+	MyLinkedListStack() {}
+	void push(T e) override {
+		list.addFirst(e); // 将元素添加到链表头部
+	}
+	T pop() override {
+		return list.removeFirst(); // 移除链表头部元素
+	}
+	T peek() override {
+		return list.getFirst(); // 获取链表头部元素
+	}
+	int getSize() override{
+		return list.getSize(); // 获取链表大小
+	}
+	bool isEmpty() override { 
+		return list.getSize() == 0; //判断链表是否为空
+	}
+
+	//注意：get函数O(n)，read所需时间为O(n^2)
+	void readMyLinkedListStack() {
+		std::cout << "\n";
+		std::cout << "MyLinkedListStack: size = " << this->getSize() << std::endl;
+		std::cout << "Stack: [";
+		for(int i = 0; i < this->getSize(); i++) {
+			std::cout << list.get(i);
 			if (i != this->getSize() - 1) {
 				std::cout << ", ";
 			}

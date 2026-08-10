@@ -234,16 +234,6 @@ void MyArray<T>::addInPlace(T n, int p) {
     }
 }
 
-//template<typename T>
-//void MyArray<T>::addLast(T e) {
-//    addInPlace(e, size);
-//}
-//
-//template<typename T>
-//void MyArray<T>::addFirst(T b) {
-//    addInPlace(b, 0);
-//}
-
 template<typename T>
 T MyArray<T>::get(int p) {
     try {

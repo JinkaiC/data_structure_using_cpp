@@ -18,7 +18,7 @@ public:
 //如果我们不允许通过MyNode类型对链表进行操作，只允许用户传入value，我们通过value对链表新建node并连接，那么我们可以做到链表无环
 template <typename T>
 class MyNoRingLinkedList {
-private:
+protected:
 	MyNode<T>* dummyHead;
 	int size;
 public:
@@ -77,7 +77,7 @@ public:
 	}
 	~MyNoRingLinkedList() {
 		MyNode<T>* node = dummyHead;
-		while (node!=nullptr)
+		while (node != nullptr)
 		{
 			MyNode<T>* nextNode = node->next;
 			delete node;
@@ -105,7 +105,7 @@ public:
 
 	//在指定位置插入元素，index从0开始计数，index=0表示在链表头插入元素，index=size表示在链表尾插入元素
 	void addInPlace(int index, T value) {
-		if(index < 0 || index > size) {
+		if (index < 0 || index > size) {
 			std::cout << "Error: Index out of bounds." << std::endl;
 			return;
 		}
@@ -132,7 +132,7 @@ public:
 			return T(); // Return default value if index is out of bounds
 		}
 		MyNode<T>* currentNode = dummyHead->next;
-		for(int i=0;i<index;i++){
+		for (int i = 0; i < index; i++) {
 			currentNode = currentNode->next;
 		}
 		return currentNode->data;
@@ -155,7 +155,7 @@ public:
 			return;
 		}
 		MyNode<T>* currentNode = dummyHead->next;
-		for(int i=0;i<index;i++){
+		for (int i = 0; i < index; i++) {
 			currentNode = currentNode->next;
 		}
 		currentNode->data = value;
@@ -164,8 +164,8 @@ public:
 	//查找链表中是否包含指定元素，返回true或false
 	bool contains(T value) {
 		MyNode<T>* currentNode = dummyHead->next;
-		while(currentNode != nullptr){
-			if(currentNode->data == value){
+		while (currentNode != nullptr) {
+			if (currentNode->data == value) {
 				return true;
 			}
 			currentNode = currentNode->next;
@@ -173,15 +173,97 @@ public:
 		return false;
 	}
 
+	//根据索引删除链表中的元素，返回删除的元素
+	T remove(int index) {
+		if (index < 0 || index >= size) {
+			std::cout << "Error: Index out of bounds." << std::endl;
+			return T(); // Return default value if index is out of bounds
+		}
+		MyNode<T>* prevNode = dummyHead;
+		for (int i = 0; i < index; i++) {
+			prevNode = prevNode->next;
+		}
+		MyNode<T>* delNode = prevNode->next;
+		prevNode->next = delNode->next;
+		T retValue = delNode->data;
+		delete delNode;
+		size--;
+		return retValue;
+	}
+
+	//删除链表头的元素，复用remove函数
+	T removeFirst() {
+		return remove(0);
+	}
+
+	//删除链表尾的元素，复用remove函数
+	T removeLast() {
+		return remove(size - 1);
+	}
 
 	//打印链表中的所有元素
 	void readMyNoRingLinkedList() {
 		MyNode<T>* currentNode = dummyHead->next;
-		while(currentNode != nullptr){
+		while (currentNode != nullptr) {
 			std::cout << currentNode->data << " -> ";
 			currentNode = currentNode->next;
 		}
 		std::cout << "nullptr" << std::endl;
 		return;
+	}
+
+};
+
+template<typename T>
+class MyNRLLWithTail : public MyNoRingLinkedList<T> {
+private:
+	MyNode<T>* tail;
+public:
+	MyNRLLWithTail() : MyNoRingLinkedList<T>() {
+		tail = this->dummyHead; // Initially, tail points to dummyHead
+	}
+	MyNRLLWithTail(T* array, int length) : MyNoRingLinkedList<T>(array, length) {
+		MyNode<T>* current = this->dummyHead;
+		while (current->next != nullptr) {
+			current = current->next;
+		}
+		tail = current; // Set tail to the last node
+	}
+	MyNRLLWithTail(const MyNRLLWithTail<T>& other) : MyNoRingLinkedList<T>(other) {
+		MyNode<T>* current = this->dummyHead;
+		while (current->next != nullptr) {
+			current = current->next;
+		}
+		tail = current; // Set tail to the last node
+	}
+	~MyNRLLWithTail() {
+		// Destructor will be handled by the base class
+	}
+
+	T getLast() {
+		return tail->data;
+	}
+	void addInPlace(int index, T value) {
+		if (index < 0 || index > this->size) {
+			std::cout << "Error: Index out of bounds." << std::endl;
+			return;
+		}
+		MyNode<T>* newNode = new MyNode<T>(value);
+		MyNode<T>* current = this->dummyHead;
+		for (int i = 0; i < index; i++) {
+			current = current->next;
+		}
+		newNode->next = current->next;
+		current->next = newNode;
+		if (index == this->size) { // If adding at the end, update tail
+			tail = newNode;
+		}
+		this->size++;
+	}
+	void addLast(T value) {
+		MyNode<T>* newNode = new MyNode<T>(value);
+		tail->next = newNode;
+		tail = newNode;
+		this->size++;
 	}
 };

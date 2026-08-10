@@ -12,6 +12,7 @@ bool isEmpty();			//判断队列是否为空
 
 #include <iostream>
 #include "MyDynamicArray.h"
+#include "MyLinkedList.h"
 
 template <typename T>
 class MyQueue {
@@ -178,5 +179,63 @@ public:
 		std::cout << "] tail(" << tail << ")" << std::endl;
 	}
 
+};
+
+template <typename T>
+class MyNRLLQueue : public MyQueue<T> {
+private:
+	MyNRLLWithTail<T> list;
+public:
+	MyNRLLQueue() : list() {}
+	MyNRLLQueue(const MyNRLLQueue& other) : list(other.list) {}
+	MyNRLLQueue& operator=(const MyNRLLQueue& other) {
+		if (this != &other) {
+			list = other.list;
+		}
+		return *this;
+	}
+	~MyNRLLQueue() {}
+	void enqueue(T value) override {
+		list.addLast(value);
+	}
+	T dequeue() override {
+		if (!isEmpty()) {
+			return list.removeFirst();
+		}
+		else {
+			std::cout << "MyNRLLQueue is empty, cannot dequeue" << std::endl;
+			std::cout << "return default value" << std::endl;
+			return T();
+		}
+	}
+	T getFront() override {
+		if (!isEmpty()) {
+			return list.getFirst();
+		}
+		else {
+			std::cout << "MyNRLLQueue is empty, cannot getFront" << std::endl;
+			std::cout << "return default value" << std::endl;
+			return T();
+		}
+	}
+	int getSize() override {
+		return list.getSize();
+	}
+	bool isEmpty() override {
+		return list.isEmpty();
+	}
+	void readMyQueue() override {//O(n^2)，因为get(i)是O(n)
+		std::cout << "\n";
+		std::cout << "This is a queue using MyNoRingLinkedList to realize" << "\n";
+		std::cout << "MyNRLLQueue: size = " << this->getSize() << std::endl;
+		std::cout << "Queue: front [";
+		for(int i=0;i<this->getSize();i++){
+			std::cout << list.get(i);
+			if(i != this->getSize()-1){
+				std::cout << ", ";
+			}
+		}
+		std::cout << "] tail" << std::endl;
+	}
 };
 
