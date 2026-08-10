@@ -68,7 +68,12 @@ public:
 		std::cout << "MyArrayQueue: size = " << this->getSize() << ", capacity = " << this->getCapacity() << std::endl;
 		std::cout << "Queue: front [";
 		for(int i=0;i<this->getSize();i++){
-			std::cout << array.get(i);
+			try{ 
+				//std::cout << array.get(i); 
+			}
+			catch (...) {
+				std::cout<<"[unprintable]";
+			}
 			if(i != this->getSize()-1){
 				std::cout << ", ";
 			}
@@ -171,7 +176,12 @@ public:
 		std::cout << "MyLoopQueue: size = " << this->getSize() << ", MyLoopQueue capacity = " << this->getCapacity() << std::endl;
 		std::cout << "MyLoopQueue: front(" << front << ")[";
 		for(int i = front; i != tail; i=(i+1)% (capacity + 1)) {
-			std::cout << array[i];
+			try {
+				std::cout << array[i];
+			}catch (...) {
+				std::cout << "[unprintable]";
+			}
+			
 			if (i != (tail+ (capacity + 1) - 1)% (capacity + 1)) {
 				std::cout << ", ";
 			}
@@ -230,7 +240,11 @@ public:
 		std::cout << "MyNRLLQueue: size = " << this->getSize() << std::endl;
 		std::cout << "Queue: front [";
 		for(int i=0;i<this->getSize();i++){
-			std::cout << list.get(i);
+			try{ 
+				std::cout << list.get(i); 
+			}catch(...) {
+				std::cout<<"[unprintable]";
+			}
 			if(i != this->getSize()-1){
 				std::cout << ", ";
 			}

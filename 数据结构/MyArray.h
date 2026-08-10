@@ -378,7 +378,12 @@ void MyArray<T>::readArray() {
     std::cout << "capacity = " << capacity << ", size = " << size << "\n";
 	std::cout << "Array elements: [";
     for (int i = 0; i < size; ++i) {
-        std::cout << data[i];
+        try { 
+            std::cout << data[i]; 
+        }
+        catch (...) { 
+            std::cout << "[unprintable]"; 
+        }
         if (i < size - 1) {
             std::cout << ", ";
 		}

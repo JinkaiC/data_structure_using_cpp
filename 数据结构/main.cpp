@@ -428,6 +428,27 @@ void testMyBST() {
     bst.readMyBST(2); // Post-order
     std::cout << "\nLevel-order traversal: ";
 	bst.readMyBST(3); // Level-order
+    std::cout << "\nIn-order traversal with stack：";
+	bst.readMyBST(4); // In-order with stack
+    std::cout << "\nRemove Element in BST\n";
+    int save;
+    bst.removeMaxElement(save);
+	bst.readMyBST(1);
+    std::cout << std::endl;
+	bst.removeMinElement(save);
+	bst.readMyBST(1);
+    std::cout << std::endl;
+    bst.removeOneElement(40);
+	bst.readMyBST(1);
+    std::cout << std::endl;
+	bst.removeOneElement(100);//test remove value not in BST
+    while (bst.getSize() > 0) {
+		bst.removeMinElement(save);
+    }
+    std::cout<<"Last removed element: " << save << std::endl;
+	//test remove from empty BST
+    bst.removeOneElement(100);
+	bst.removeMaxElement(save);
 }
 
 int main() {

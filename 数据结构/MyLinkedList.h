@@ -10,7 +10,12 @@ public:
 	MyNode(T value) : data(value), next(nullptr) {}
 	MyNode(T value, MyNode* nextNode) : data(value), next(nextNode) {}
 	void readMyNode() {
-		std::cout << data << std::endl;
+		try {
+			std::cout << data << std::endl;
+		}
+		catch (...) {
+			std::cout << "[unprintable]" << std::endl;
+		}
 	}
 };
 
@@ -205,7 +210,13 @@ public:
 	void readMyNoRingLinkedList() {
 		MyNode<T>* currentNode = dummyHead->next;
 		while (currentNode != nullptr) {
-			std::cout << currentNode->data << " -> ";
+			try{
+				std::cout << currentNode->data;
+			}
+			catch(...) {
+				std::cout << "[unprintable]";
+			}
+			std::cout << " -> ";
 			currentNode = currentNode->next;
 		}
 		std::cout << "nullptr" << std::endl;

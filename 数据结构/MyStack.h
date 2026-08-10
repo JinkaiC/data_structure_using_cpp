@@ -59,7 +59,12 @@ public:
 		std::cout << "MyArrayStack: size = " << this->getSize() << ", capacity = " << this->capacity << std::endl;
 		std::cout << "Stack: [";
 		for(int i = 0; i < this->getSize(); i++) {
-			std::cout << this->data.get(i);
+			try{ 
+				std::cout << this->data.get(i); 
+			}
+			catch (...) {
+				std::cout << "[unprintable]";
+			}
 			if (i != this->getSize() - 1) {
 				std::cout << ", ";
 			}
@@ -96,7 +101,11 @@ public:
 		std::cout << "MyLinkedListStack: size = " << this->getSize() << std::endl;
 		std::cout << "Stack: [";
 		for(int i = 0; i < this->getSize(); i++) {
-			std::cout << list.get(i);
+			try{
+				std::cout << list.get(i);
+			}catch (...) {
+				std::cout << "[unprintable]";
+			}
 			if (i != this->getSize() - 1) {
 				std::cout << ", ";
 			}
