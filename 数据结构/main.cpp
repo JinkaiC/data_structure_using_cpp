@@ -4,6 +4,7 @@
 #include "MyQueue.h"
 #include "MyLinkedList.h"
 #include "MyBST.h"
+#include "MySet.h"
 
 void testMyArray() {
 	std::cout << "Testing MyArray..." << std::endl;
@@ -451,6 +452,128 @@ void testMyBST() {
 	bst.removeMaxElement(save);
 }
 
+void testMyBSTSet() {
+    std::cout << "Testing MyBSTSet..." << std::endl;
+
+    // 1. 基本插入与大小
+    MyBSTSet<int> set;
+    std::cout << "Initial size: " << set.getSize() << ", isEmpty: " << set.isEmpty() << std::endl;
+
+    int testValues[] = { 50, 30, 70, 20, 40, 60, 80, 55 };
+    for (int v : testValues) {
+        set.add(v);
+    }
+    std::cout << "After inserting 8 elements, size = " << set.getSize() << std::endl;   // 应为 8
+    std::cout << "Contains 40? " << set.contains(40) << std::endl;   // true
+    std::cout << "Contains 100? " << set.contains(100) << std::endl; // false
+
+    // 2. 重复插入测试（集合不应增加大小）
+    set.add(50);
+    std::cout << "After inserting duplicate 50, size = " << set.getSize() << std::endl; // 仍为 8
+    std::cout << "Contains 50? " << set.contains(50) << std::endl;   // true
+
+    // 3. 删除元素
+    set.remove(40);
+    std::cout << "After removing 40, size = " << set.getSize() << std::endl;  // 7
+    std::cout << "Contains 40? " << set.contains(40) << std::endl;   // false
+
+    // 删除不存在的元素
+    set.remove(100);
+    std::cout << "After removing 100 (not exist), size = " << set.getSize() << std::endl; // 仍为 7
+
+    // 4. 清空集合（逐个删除）
+    while (!set.isEmpty()) {
+        // 由于无法获得元素，我们可以用一个已知存在的元素删除，但更合理的是删除最小值/最大值？
+        // 这里我们选择删除特定已知值，但为了通用性，我们可以依次删除剩余元素。
+        // 由于无法遍历，只能通过已知存在的值删除。为了测试，我们按顺序删除初始插入的值中剩余的元素。
+        // 简单起见，我们已知剩余元素有：50,30,70,20,60,80,55（40已删）
+        // 但为了测试所有删除，我们可以依赖 remove 方法多次调用。
+        // 这里我们直接循环删除已知存在的元素（但不知道内部结构），更好的方式是连续删除最小值，
+        // 但集合没有提供该接口。因此只能通过 contains 判断是否存在，然后删除。
+        // 我们用一个循环暴力尝试删除所有可能的值（但不够严谨）。
+        // 实际测试中，我们可以用一套已知值列表，但为简便，我们删除刚才插入的所有值（除了40）。
+        // 由于没有遍历接口，我们只能手动列出。
+        int knownValues[] = { 50, 30, 70, 20, 60, 80, 55 };
+        for (int v : knownValues) {
+            if (set.contains(v)) {
+                set.remove(v);
+                std::cout << "Removed " << v << ", size now = " << set.getSize() << std::endl;
+            }
+        }
+        // 由于循环中可能会重复删除已删除的，但 contains 检查过，所以不会重复。
+        // 循环结束后应为空。
+    }
+    std::cout << "After clearing, size = " << set.getSize() << ", isEmpty = " << set.isEmpty() << std::endl;
+
+    // 5. 边界测试：对空集合操作
+    set.remove(10);
+    std::cout << "Remove on empty set (should print not found message)" << std::endl;
+    std::cout << "Contains 10? " << set.contains(10) << std::endl;
+
+    std::cout << "Finished testing MyBSTSet." << std::endl;
+}
+
+void testMyNRLLSet() {
+    std::cout << "Testing MyNRLLSet..." << std::endl;
+
+    // 1. 基本插入与大小
+    MyNRLLSet<int> set;
+    std::cout << "Initial size: " << set.getSize() << ", isEmpty: " << set.isEmpty() << std::endl;
+
+    int testValues[] = { 50, 30, 70, 20, 40, 60, 80, 55 };
+    for (int v : testValues) {
+        set.add(v);
+    }
+    std::cout << "After inserting 8 elements, size = " << set.getSize() << std::endl;   // 应为 8
+    std::cout << "Contains 40? " << set.contains(40) << std::endl;   // true
+    std::cout << "Contains 100? " << set.contains(100) << std::endl; // false
+
+    // 2. 重复插入测试（集合不应增加大小）
+    set.add(50);
+    std::cout << "After inserting duplicate 50, size = " << set.getSize() << std::endl; // 仍为 8
+    std::cout << "Contains 50? " << set.contains(50) << std::endl;   // true
+
+    // 3. 删除元素
+    set.remove(40);
+    std::cout << "After removing 40, size = " << set.getSize() << std::endl;  // 7
+    std::cout << "Contains 40? " << set.contains(40) << std::endl;   // false
+
+    // 删除不存在的元素
+    set.remove(100);
+    std::cout << "After removing 100 (not exist), size = " << set.getSize() << std::endl; // 仍为 7
+
+    // 4. 清空集合（逐个删除）
+    while (!set.isEmpty()) {
+        // 由于无法获得元素，我们可以用一个已知存在的元素删除，但更合理的是删除最小值/最大值？
+        // 这里我们选择删除特定已知值，但为了通用性，我们可以依次删除剩余元素。
+        // 由于无法遍历，只能通过已知存在的值删除。为了测试，我们按顺序删除初始插入的值中剩余的元素。
+        // 简单起见，我们已知剩余元素有：50,30,70,20,60,80,55（40已删）
+        // 但为了测试所有删除，我们可以依赖 remove 方法多次调用。
+        // 这里我们直接循环删除已知存在的元素（但不知道内部结构），更好的方式是连续删除最小值，
+        // 但集合没有提供该接口。因此只能通过 contains 判断是否存在，然后删除。
+        // 我们用一个循环暴力尝试删除所有可能的值（但不够严谨）。
+        // 实际测试中，我们可以用一套已知值列表，但为简便，我们删除刚才插入的所有值（除了40）。
+        // 由于没有遍历接口，我们只能手动列出。
+        int knownValues[] = { 50, 30, 70, 20, 60, 80, 55 };
+        for (int v : knownValues) {
+            if (set.contains(v)) {
+                set.remove(v);
+                std::cout << "Removed " << v << ", size now = " << set.getSize() << std::endl;
+            }
+        }
+        // 由于循环中可能会重复删除已删除的，但 contains 检查过，所以不会重复。
+        // 循环结束后应为空。
+    }
+    std::cout << "After clearing, size = " << set.getSize() << ", isEmpty = " << set.isEmpty() << std::endl;
+
+    // 5. 边界测试：对空集合操作
+    set.remove(10);
+    std::cout << "Remove on empty set (should print not found message)" << std::endl;
+    std::cout << "Contains 10? " << set.contains(10) << std::endl;
+
+    std::cout << "Finished testing MyNRLLSet." << std::endl;
+}
+
 int main() {
     //testMyArray();
     //testMyDynamicArray();
@@ -460,6 +583,8 @@ int main() {
     //testMyNoRingLinkedList();
     //testMyLinkedListStack();
     //testMyNRLLQueue();
-    testMyBST();
+    //testMyBST();
+    //testMyBSTSet();
+    testMyNRLLSet();
     return 0;
 }

@@ -132,6 +132,7 @@
     <ClInclude Include="MyStack.h" />
     <ClInclude Include="MyLinkedList.h" />
     <ClInclude Include="MyBST.h" />
+    <ClInclude Include="MySet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

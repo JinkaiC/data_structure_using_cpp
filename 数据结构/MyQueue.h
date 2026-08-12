@@ -69,7 +69,7 @@ public:
 		std::cout << "Queue: front [";
 		for(int i=0;i<this->getSize();i++){
 			try{ 
-				//std::cout << array.get(i); 
+				std::cout << array.get(i); 
 			}
 			catch (...) {
 				std::cout<<"[unprintable]";

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 #include "MyQueue.h"
 #include "MyStack.h"
 
@@ -194,18 +195,20 @@ private:
 		if(node == nullptr) {
 			return;
 		}
-		MyArrayQueue<std::pair<MyBSTNode<T>*, int>> queue;//pair<node,depth>
-		queue.enqueue({ node,depth });
-		while (!queue.isEmpty()) {
-			std::pair<MyBSTNode<T>*, int> front = queue.dequeue();
+		std::queue<std::pair<MyBSTNode<T>*, int>> q; //pair<node,depth>
+		//MyArrayQueue<std::pair<MyBSTNode<T>*, int>> queue;//pair<node,depth>
+		q.push({ node,depth });
+		while (!q.empty()) {
+			std::pair<MyBSTNode<T>*, int> front = q.front();
+			q.pop();
 			MyBSTNode<T>* current = front.first;
 			int currentDepth = front.second;
 			coutANode(current->data, currentDepth);
 			if (current->left != nullptr) {
-				queue.enqueue({ current->left, currentDepth + 1 });
+				q.push({ current->left, currentDepth + 1 });
 			}
 			if (current->right != nullptr) {
-				queue.enqueue({ current->right, currentDepth + 1 });
+				q.push({ current->right, currentDepth + 1 });
 			}
 		}
 	}

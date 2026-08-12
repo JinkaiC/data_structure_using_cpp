@@ -95,7 +95,7 @@ public:
 		return list.getSize() == 0; //判断链表是否为空
 	}
 
-	//注意：get函数O(n)，read所需时间为O(n^2)
+	//**注意：get函数O(n)，read所需时间为O(n^2)
 	void readMyLinkedListStack() {
 		std::cout << "\n";
 		std::cout << "MyLinkedListStack: size = " << this->getSize() << std::endl;
