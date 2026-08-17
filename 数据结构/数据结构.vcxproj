@@ -133,6 +133,10 @@
     <ClInclude Include="MyLinkedList.h" />
     <ClInclude Include="MyBST.h" />
     <ClInclude Include="MySet.h" />
+    <ClInclude Include="MyMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="record.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,7 @@
+/********************************************************
+8.12
+1,MyNRLLList(及其他类，不过最明显的是这个类)没有遍历方法，导致MyNRLLSet::remove()、MyNRLLQueue::readMyQueue()、MyLinkedListStack::readMyLinkedListStack()效率低下
+2,许多类的read方法对于特殊的模板类T，由于没有重载<<，可能出现报错（初见于用MyQueue实现MyBST.h层级遍历时，MyQueue.h 72行报错，目前在MyBST.h中使用STL queue以暂时避免）
+3,目前性能显著需要优化的地方，用 //** 进行标记
+
+********************************************************/

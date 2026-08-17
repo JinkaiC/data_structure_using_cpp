@@ -5,6 +5,7 @@
 #include "MyLinkedList.h"
 #include "MyBST.h"
 #include "MySet.h"
+#include "MyMap.h"
 
 void testMyArray() {
 	std::cout << "Testing MyArray..." << std::endl;
@@ -574,6 +575,141 @@ void testMyNRLLSet() {
     std::cout << "Finished testing MyNRLLSet." << std::endl;
 }
 
+void testMyNRLLMap() {
+    std::cout << "Testing MyNRLLMap..." << std::endl;
+
+    // ---------- 1. 构造与基本操作 ----------
+    MyNRLLMap<int, std::string> map;
+    std::cout << "Initial size: " << map.getSize() << ", empty? " << map.isEmpty() << std::endl;
+
+    // 插入键值对
+    map.add(1, "one");
+    map.add(2, "two");
+    map.add(3, "three");
+    std::cout << "After adding 3 pairs, size = " << map.getSize() << std::endl;
+
+    // 获取值
+    std::cout << "get(1) = " << map.get(1) << std::endl;
+    std::cout << "get(2) = " << map.get(2) << std::endl;
+    std::cout << "get(3) = " << map.get(3) << std::endl;
+
+    // 包含性测试
+    std::cout << "contains(2)? " << map.contains(2) << std::endl;
+    std::cout << "contains(5)? " << map.contains(5) << std::endl;
+
+    // ---------- 2. 覆盖已有键 ----------
+    map.add(2, "TWO");   // 应覆盖值，并打印提示
+    std::cout << "After add(2, \"TWO\"), get(2) = " << map.get(2) << std::endl;
+
+    // ---------- 3. set 更新 ----------
+    map.set(3, "THREE");
+    std::cout << "After set(3, \"THREE\"), get(3) = " << map.get(3) << std::endl;
+
+    // 尝试 set 不存在的键（应打印错误）
+    map.set(5, "five");
+
+    // ---------- 4. 删除元素 ----------
+    std::cout << "remove(2) = " << map.remove(2) << std::endl;   // 返回 "TWO"
+    std::cout << "After removal, size = " << map.getSize() << std::endl;
+    std::cout << "contains(2)? " << map.contains(2) << std::endl;
+
+    // 删除不存在的键
+    std::cout << "remove(10) = " << map.remove(10) << std::endl; // 打印错误并返回默认值
+
+    // ---------- 5. 清空所有元素 ----------
+    map.clear();
+    std::cout << "After clear, size = " << map.getSize() << ", empty? " << map.isEmpty() << std::endl;
+
+    // ---------- 6. 边界测试：空 map 操作 ----------
+    std::cout << "get(1) on empty: " << map.get(1) << std::endl;
+    map.remove(1);
+    std::cout << "contains(1)? " << map.contains(1) << std::endl;
+
+    // ---------- 7. 批量插入 ----------
+    for (int i = 0; i < 10; ++i) {
+        map.add(i, "value: key*10");
+    }
+    std::cout << "After inserting 10 elements, size = " << map.getSize() << std::endl;
+    std::cout << "get(5) = " << map.get(5) << std::endl;
+
+    std::cout << "Finished testing MyNRLLMap." << std::endl;
+}
+
+void testMyBSTMap() {
+    std::cout << "Testing MyBSTMap..." << std::endl;
+
+    // ---------- 1. 构造与基本操作 ----------
+    MyBSTMap<int, std::string> map;
+    std::cout << "Initial size: " << map.getSize() << ", empty? " << map.isEmpty() << std::endl;
+
+    // 插入键值对（顺序打乱，测试 BST 结构）
+    map.add(50, "fifty");
+    map.add(30, "thirty");
+    map.add(70, "seventy");
+    map.add(20, "twenty");
+    map.add(40, "forty");
+    map.add(60, "sixty");
+    map.add(80, "eighty");
+    map.add(55, "fifty-five");
+    std::cout << "After inserting 8 pairs, size = " << map.getSize() << std::endl;
+
+    // 获取值
+    std::cout << "get(50) = " << map.get(50) << std::endl;
+    std::cout << "get(40) = " << map.get(40) << std::endl;
+    std::cout << "get(55) = " << map.get(55) << std::endl;
+    std::cout << "get(100) (not exist) = " << map.get(100) << std::endl; // 打印错误并返回默认
+
+    // 包含性测试
+    std::cout << "contains(60)? " << map.contains(60) << std::endl;
+    std::cout << "contains(100)? " << map.contains(100) << std::endl;
+
+    // ---------- 2. 覆盖已有键 ----------
+    map.add(30, "THIRTY");   // 覆盖值
+    std::cout << "After add(30, \"THIRTY\"), get(30) = " << map.get(30) << std::endl;
+
+    // ---------- 3. set 更新 ----------
+    map.set(70, "SEVENTY");
+    std::cout << "After set(70, \"SEVENTY\"), get(70) = " << map.get(70) << std::endl;
+
+    // 尝试 set 不存在的键
+    map.set(90, "ninety");
+
+    // ---------- 4. 删除元素 ----------
+    std::cout << "remove(40) = " << map.remove(40) << std::endl;   // 返回 "forty"
+    std::cout << "After removing 40, size = " << map.getSize() << std::endl;
+    std::cout << "contains(40)? " << map.contains(40) << std::endl;
+
+    // 删除不存在的键
+    std::cout << "remove(100) = " << map.remove(100) << std::endl; // 打印错误并返回默认值
+
+    // 删除根节点（50）
+    std::cout << "remove(50) = " << map.remove(50) << std::endl;
+    std::cout << "After removing root 50, size = " << map.getSize() << std::endl;
+    std::cout << "contains(50)? " << map.contains(50) << std::endl;
+
+    // 删除叶子节点（20）
+    std::cout << "remove(20) = " << map.remove(20) << std::endl;
+    std::cout << "size now = " << map.getSize() << std::endl;
+
+    // ---------- 5. 清空所有元素 ----------
+    map.clear();
+    std::cout << "After clear, size = " << map.getSize() << ", empty? " << map.isEmpty() << std::endl;
+
+    // ---------- 6. 边界测试：空 map 操作 ----------
+    std::cout << "get(1) on empty: " << map.get(1) << std::endl;
+    map.remove(1);
+    std::cout << "contains(1)? " << map.contains(1) << std::endl;
+
+    // ---------- 7. 批量插入 ----------
+    for (int i = 0; i < 10; ++i) {
+        map.add(i * 10, "val: key*10");
+    }
+    std::cout << "After inserting 10 elements, size = " << map.getSize() << std::endl;
+    std::cout << "get(50) = " << map.get(50) << std::endl;
+
+    std::cout << "Finished testing MyBSTMap." << std::endl;
+}
+
 int main() {
     //testMyArray();
     //testMyDynamicArray();
@@ -585,6 +721,8 @@ int main() {
     //testMyNRLLQueue();
     //testMyBST();
     //testMyBSTSet();
-    testMyNRLLSet();
+    //testMyNRLLSet();
+    testMyNRLLMap();
+    testMyBSTMap();
     return 0;
 }

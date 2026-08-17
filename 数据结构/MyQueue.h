@@ -234,7 +234,7 @@ public:
 	bool isEmpty() override {
 		return list.isEmpty();
 	}
-	void readMyQueue() override {//O(n^2)，因为get(i)是O(n)
+	void readMyQueue() override {//**O(n^2)，因为get(i)是O(n)
 		std::cout << "\n";
 		std::cout << "This is a queue using MyNoRingLinkedList to realize" << "\n";
 		std::cout << "MyNRLLQueue: size = " << this->getSize() << std::endl;
